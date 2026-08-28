@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grocery-tracker-v1';
+const CACHE_NAME = 'trip-checklist-v1';
 const ASSETS = ['./', './index.html'];
 
 self.addEventListener('install', (e) => {
