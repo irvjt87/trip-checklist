@@ -3,6 +3,8 @@ In Powershell:
 
 git add .
 
-git commit -m "Grocery-Tracker Update"
+git commit -m "Trip-Checklist Update"
 
 git push
+
+
