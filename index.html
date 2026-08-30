@@ -139,7 +139,7 @@
     </div>
   </div>
 
-  <div class="section-title">Checklist & Itinerary Details (Sorted by Priority)</div>
+  <div class="section-title">Checklist & Itinerary Details</div>
   <div class="grid" id="checklistGrid"></div>
 
   <script>
@@ -321,8 +321,13 @@
       // Render Header Title
       document.getElementById('activeTripTitle').innerText = activeTrip.name;
 
-      // Sort items by priority order integer
-      const sortedItems = [...activeTrip.items].sort((a, b) => (a.order || 0) - (b.order || 0));
+      // Two-tier sort: 1. Status ('pending' before 'done') -> 2. Priority Order Number
+      const sortedItems = [...activeTrip.items].sort((a, b) => {
+        if (a.status !== b.status) {
+          return a.status === 'pending' ? -1 : 1;
+        }
+        return (a.order || 0) - (b.order || 0);
+      });
 
       // Render Checklist Grid
       const grid = document.getElementById('checklistGrid');
