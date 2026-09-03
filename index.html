@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Trip Checklist">
@@ -24,13 +24,20 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 
-    body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; padding-bottom: 60px; max-width: 900px; margin: 0 auto; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; padding-bottom: max(60px, env(safe-area-inset-bottom)); max-width: 900px; margin: 0 auto; }
+
+    /* Input base fix for iOS Safari: minimum 16px prevents viewport auto-zooming */
+    input, select, textarea, button {
+      font-size: 16px; 
+      -webkit-appearance: none;
+      appearance: none;
+    }
 
     header { border-bottom: 1px solid var(--card-border); padding-bottom: 16px; margin-bottom: 20px; }
     
     .trip-manager-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; background: #070d19; padding: 10px; border-radius: var(--radius); border: 1px solid var(--card-border); }
     .trip-manager-bar label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-    .trip-select { background: #0f172a; color: white; border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 6px; font-size: 0.95rem; font-weight: 600; flex: 1; min-width: 180px; }
+    .trip-select { background: #0f172a; color: white; border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 6px; font-weight: 600; flex: 1; min-width: 180px; }
     
     .btn-sm { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
     .btn-sm:hover { border-color: #60a5fa; }
@@ -50,7 +57,7 @@
     .add-panel h2 { font-size: 1rem; margin-bottom: 12px; color: var(--text-main); }
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--card-border); background: #0f172a; color: white; font-size: 0.95rem; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--card-border); background: #0f172a; color: white; }
     .form-group textarea { resize: vertical; min-height: 60px; }
     .form-actions { display: flex; gap: 8px; justify-content: flex-end; }
     .btn-cancel { background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); padding: 8px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; }
@@ -157,10 +164,31 @@
       ]
     };
 
-    let appData = JSON.parse(localStorage.getItem('multi_trip_app_data')) || INITIAL_STATE;
+    function safeGetStorage(key) {
+      try { return localStorage.getItem(key); } 
+      catch (e) { return null; }
+    }
+
+    function safeSetStorage(key, value) {
+      try { localStorage.setItem(key, value); } 
+      catch (e) {}
+    }
+
+    function loadInitialData() {
+      const stored = safeGetStorage('multi_trip_app_data');
+      if (!stored) return INITIAL_STATE;
+      try {
+        const parsed = JSON.parse(stored);
+        return (parsed && parsed.trips && Array.isArray(parsed.trips)) ? parsed : INITIAL_STATE;
+      } catch (e) {
+        return INITIAL_STATE;
+      }
+    }
+
+    let appData = loadInitialData();
 
     function saveState() {
-      localStorage.setItem('multi_trip_app_data', JSON.stringify(appData));
+      safeSetStorage('multi_trip_app_data', JSON.stringify(appData));
       render();
     }
 
@@ -293,8 +321,11 @@
     }
 
     function deleteItem(id) {
-      if (confirm('Delete this item permanently?')) {
-        const activeTrip = getActiveTrip();
+      const activeTrip = getActiveTrip();
+      const item = activeTrip.items.find(i => i.id === id);
+      const name = item ? item.name : 'this item';
+
+      if (confirm(`Delete "${name}" permanently?`)) {
         activeTrip.items = activeTrip.items.filter(i => i.id !== id);
         saveState();
       }
@@ -365,8 +396,25 @@
       `).join('');
     }
 
-    // Initial load
-    render();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', render);
+    } else {
+      render();
+    }
+
+    // Force purge old Service Workers and clear cache storage to fix domain collisions
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          for (let name of names) caches.delete(name);
+        });
+      }
+    }
   </script>
 </body>
 </html>
