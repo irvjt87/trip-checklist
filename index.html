@@ -8,10 +8,10 @@
   <meta name="apple-mobile-web-app-title" content="Trip Checklist">
   <title>Multi-Trip Manager with Reordering</title>
 
-  <!-- Standard SVG Favicon (Explicit UTF-8 Character Encoding) -->
+  <!-- Standard SVG Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231e293b'/><text x='50%' y='68%' font-size='60' text-anchor='middle'>🧳</text></svg>">
 
-  <!-- Static iOS Touch Icon Data URI (Ensures instant iOS recognition without JS reliance) -->
+  <!-- Static iOS Touch Icon -->
   <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%231e293b'/><text x='50%' y='68%' font-size='110' text-anchor='middle'>🧳</text></svg>">
 
   <style>
@@ -26,9 +26,11 @@
     .btn-subtle { background: #2a2a2a; color: #aaa; border: 1px solid #333; }
     
     /* Add Form */
-    .add-form { display: flex; gap: 4px; background: #1e1e1e; padding: 6px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #2a2a2a; }
-    .add-form input[name="category"] { width: 85px; text-transform: capitalize; }
+    .add-form { display: flex; flex-direction: column; gap: 4px; background: #1e1e1e; padding: 6px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #2a2a2a; }
+    .add-form-row { display: flex; gap: 4px; }
+    .add-form select[name="category"] { width: 100px; font-weight: normal; background: #2a2a2a; }
     .add-form input[name="name"] { flex: 1; }
+    .add-form input[name="notes"] { flex: 1; font-size: 12px; color: #ccc; }
     
     /* List Layout */
     .list { display: flex; flex-direction: column; gap: 4px; }
@@ -37,11 +39,12 @@
     
     /* Item Details */
     .item-details { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .item-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .item-meta { font-size: 10px; color: #888; display: flex; gap: 6px; align-items: center; }
-    .category-badge { font-family: monospace; font-weight: bold; background: #2a2a2a; color: #ffb74d; padding: 1px 4px; border-radius: 3px; }
+    .item-header { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .item-title { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .item-notes { font-size: 11px; color: #aaa; word-break: break-word; line-height: 1.25; }
+    .category-badge { font-family: monospace; font-weight: bold; font-size: 10px; background: #2a2a2a; color: #ffb74d; padding: 1px 4px; border-radius: 3px; flex-shrink: 0; }
     
-    /* Reorder Buttons & Actions */
+    /* Reorder Buttons */
     .reorder { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
     .reorder-btn { background: #2a2a2a; border: 1px solid #333; color: #ccc; padding: 1px 4px; font-size: 9px; border-radius: 3px; cursor: pointer; line-height: 1; }
     .reorder-btn:disabled { opacity: 0.2; cursor: default; }
@@ -67,9 +70,22 @@
 
   <!-- Add Item Form -->
   <form class="add-form" onsubmit="addItem(event)">
-    <input type="text" id="newCategory" name="category" placeholder="Cat/Tag" autocomplete="off">
-    <input type="text" id="newName" name="name" placeholder="Item / Activity Name..." required autocomplete="off">
-    <button type="submit" class="btn">Add</button>
+    <div class="add-form-row">
+      <select id="newCategory" name="category">
+        <option value="General">General</option>
+        <option value="Logistics">Logistics</option>
+        <option value="Activities">Activities</option>
+        <option value="Gear">Gear</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Lodging">Lodging</option>
+        <option value="Docs">Docs</option>
+      </select>
+      <input type="text" id="newName" name="name" placeholder="Item / Activity Name..." required autocomplete="off">
+      <button type="submit" class="btn">Add</button>
+    </div>
+    <div class="add-form-row">
+      <input type="text" id="newNotes" name="notes" placeholder="Optional address / comments..." autocomplete="off">
+    </div>
   </form>
 
   <!-- Items List Container -->
@@ -81,10 +97,10 @@
       activeTrip: "Springfield / Branson Trip",
       trips: {
         "Springfield / Branson Trip": [
-          { id: 1, name: "Cabin Rental Confirmation", category: "Logistics", completed: false, priority: 1 },
-          { id: 2, name: "Silver Dollar City Tickets", category: "Activities", completed: false, priority: 2 },
-          { id: 3, name: "Trout Fishing Rods & Tackle", category: "Gear", completed: false, priority: 3 },
-          { id: 4, name: "Bass Pro Shops Stop List", category: "Shopping", completed: true, priority: 4 }
+          { id: 1, name: "Cabin Rental Confirmation", category: "Lodging", notes: "123 Timber Lane, Branson, MO", completed: false, priority: 1 },
+          { id: 2, name: "Silver Dollar City Tickets", category: "Activities", notes: "Order #88391 - Gate opens 9 AM", completed: false, priority: 2 },
+          { id: 3, name: "Trout Fishing Rods & Tackle", category: "Gear", notes: "", completed: false, priority: 3 },
+          { id: 4, name: "Bass Pro Shops Stop List", category: "Shopping", notes: "Springfield flagship store", completed: true, priority: 4 }
         ]
       }
     };
@@ -163,14 +179,16 @@
       e.preventDefault();
       const catInput = document.getElementById('newCategory');
       const nameInput = document.getElementById('newName');
+      const notesInput = document.getElementById('newNotes');
       const items = db.trips[db.activeTrip] || [];
 
       const maxPriority = items.length ? Math.max(...items.map(i => i.priority || 0)) : 0;
 
       const newItem = {
         id: Date.now(),
-        category: catInput.value.trim() || "General",
+        category: catInput.value || "General",
         name: nameInput.value.trim(),
+        notes: notesInput.value.trim(),
         completed: false,
         priority: maxPriority + 1
       };
@@ -178,8 +196,9 @@
       items.push(newItem);
       save();
 
-      // Clear name, preserve focus to prevent auto-scroll jumps
+      // Clear input fields, keep category & focus to prevent scroll jumps
       nameInput.value = '';
+      notesInput.value = '';
       nameInput.focus();
       renderList();
     }
@@ -225,21 +244,32 @@
       const target = items.find(i => i.id === id);
       if (!target) return;
 
-      const newCat = prompt("Edit Category/Tag:", target.category);
-      if (newCat === null) return;
-      const newName = prompt("Edit Item Name:", target.name);
+      const newName = prompt("Edit Item / Activity Name:", target.name);
       if (newName === null) return;
 
-      target.category = newCat.trim() || "General";
+      const newCat = prompt("Edit Category (General, Logistics, Activities, Gear, Shopping, Lodging, Docs):", target.category);
+      if (newCat === null) return;
+
+      const newNotes = prompt("Edit Address / Comments (optional):", target.notes || "");
+      if (newNotes === null) return;
+
       target.name = newName.trim();
+      target.category = newCat.trim() || "General";
+      target.notes = newNotes.trim();
       save();
       renderList();
     }
 
     function deleteItem(id) {
-      db.trips[db.activeTrip] = db.trips[db.activeTrip].filter(i => i.id !== id);
-      save();
-      renderList();
+      const items = db.trips[db.activeTrip];
+      const target = items.find(i => i.id === id);
+      if (!target) return;
+
+      if (confirm(`Delete "${target.name}"?`)) {
+        db.trips[db.activeTrip] = items.filter(i => i.id !== id);
+        save();
+        renderList();
+      }
     }
 
     function renderList() {
@@ -268,10 +298,11 @@
               <button class="reorder-btn" onclick="moveItem(${item.id}, 'down')" ${isLast ? 'disabled' : ''}>▼</button>
             </div>
             <div class="item-details">
-              <span class="item-title">${item.name}</span>
-              <div class="item-meta">
+              <div class="item-header">
+                <span class="item-title">${item.name}</span>
                 <span class="category-badge">${item.category}</span>
               </div>
+              ${item.notes ? `<div class="item-notes">${item.notes}</div>` : ''}
             </div>
             <button class="toggle ${item.completed ? 'done' : 'pending'}" onclick="toggleStatus(${item.id})">
               ${item.completed ? 'DONE' : 'PACK'}
