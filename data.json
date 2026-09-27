@@ -27,18 +27,18 @@
         "priority": 3
       },
       {
-        "id": 1,
-        "name": "Approx Minivan Location - Princeton MN",
-        "category": "Logistics",
-        "notes": "301 N Rum River Dr, Princeton, MN 55371",
-        "completed": false,
-        "priority": 4
-      },
-      {
         "id": 1790531824657,
         "category": "Gear",
         "name": "Celsius Packs & Water",
         "notes": "",
+        "completed": false,
+        "priority": 4
+      },
+      {
+        "id": 1,
+        "name": "Approx Minivan Location - Princeton MN",
+        "category": "Logistics",
+        "notes": "301 N Rum River Dr, Princeton, MN 55371",
         "completed": false,
         "priority": 5
       },
