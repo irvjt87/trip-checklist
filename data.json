@@ -67,6 +67,15 @@
         "priority": 8
       }
     ],
-    "My Car 'trip'": []
+    "My Car 'trip'": [
+      {
+        "id": 1790532647051,
+        "category": "Logistics",
+        "name": "2014 Honda Pilot EX-L",
+        "notes": "Springfield Nissan: 3505 South Campbell Avenue, Springfield, MO 65807",
+        "completed": false,
+        "priority": 1
+      }
+    ]
   }
 }
