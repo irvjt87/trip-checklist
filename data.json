@@ -31,7 +31,7 @@
         "name": "Bass Pro Shops Stop List",
         "category": "Shopping",
         "notes": "Springfield flagship store",
-        "completed": true,
+        "completed": false,
         "priority": 4
       }
     ]
