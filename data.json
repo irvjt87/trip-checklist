@@ -1,7 +1,7 @@
 {
-  "activeTrip": "Springfield / Branson Trip",
+  "activeTrip": "MN Minivan Trip",
   "trips": {
-    "Springfield / Branson Trip": [
+    "MN Minivan Trip": [
       {
         "id": 3,
         "name": "Cashiers Check & Cash",
