@@ -1,5 +1,5 @@
 {
-  "activeTrip": "MN Minivan Trip",
+  "activeTrip": "My Car 'trip'",
   "trips": {
     "MN Minivan Trip": [
       {
@@ -66,6 +66,7 @@
         "completed": false,
         "priority": 8
       }
-    ]
+    ],
+    "My Car 'trip'": []
   }
 }
