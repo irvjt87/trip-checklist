@@ -11,18 +11,18 @@
         "priority": 1
       },
       {
-        "id": 2,
-        "name": "CarMax - Brooklyn MN",
-        "category": "Logistics",
-        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
-        "completed": false,
-        "priority": 2
-      },
-      {
         "id": 3,
         "name": "Cashiers Check & Cash",
         "category": "Docs",
         "notes": "",
+        "completed": false,
+        "priority": 2
+      },
+      {
+        "id": 2,
+        "name": "CarMax - Brooklyn MN",
+        "category": "Logistics",
+        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
         "completed": false,
         "priority": 3
       },
