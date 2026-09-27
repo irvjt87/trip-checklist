@@ -1,0 +1,39 @@
+{
+  "activeTrip": "Springfield / Branson Trip",
+  "trips": {
+    "Springfield / Branson Trip": [
+      {
+        "id": 1,
+        "name": "Cabin Rental Confirmation",
+        "category": "Lodging",
+        "notes": "123 Timber Lane, Branson, MO",
+        "completed": false,
+        "priority": 1
+      },
+      {
+        "id": 2,
+        "name": "Silver Dollar City Tickets",
+        "category": "Activities",
+        "notes": "Order #88391 - Gate opens 9 AM",
+        "completed": false,
+        "priority": 2
+      },
+      {
+        "id": 3,
+        "name": "Trout Fishing Rods & Tackle",
+        "category": "Gear",
+        "notes": "",
+        "completed": false,
+        "priority": 3
+      },
+      {
+        "id": 4,
+        "name": "Bass Pro Shops Stop List",
+        "category": "Shopping",
+        "notes": "Springfield flagship store",
+        "completed": true,
+        "priority": 4
+      }
+    ]
+  }
+}

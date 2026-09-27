@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Trip Checklist">
-  <title>Multi-Trip Manager with Reordering</title>
+  <title>Multi-Trip Manager with Reordering & GitHub Sync</title>
 
   <!-- Standard SVG Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231e293b'/><text x='50%' y='68%' font-size='60' text-anchor='middle'>🧳</text></svg>">
@@ -15,15 +15,15 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%231e293b'/><text x='50%' y='68%' font-size='110' text-anchor='middle'>🧳</text></svg>">
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: #121212; color: #e0e0e0; padding: 10px; max-width: 480px; margin: 0 auto; font-size: 13px; }
     
     /* Header Controls */
     .bar { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
-    select, input, button { font-size: 13px; padding: 6px 8px; border-radius: 6px; border: 1px solid #333; background: #1e1e1e; color: #fff; outline: none; }
+    select, input, button { font-size: 13px; padding: 6px 8px; border-radius: 6px; border: 1px solid #333; background: #1e1e1e; color: #fff; outline: none; -webkit-appearance: none; appearance: none; }
     select { flex: 1; font-weight: bold; background: #2a2a2a; }
     .btn { background: #2c6bed; color: white; border: none; font-weight: 600; cursor: pointer; white-space: nowrap; }
-    .btn-subtle { background: #2a2a2a; color: #aaa; border: 1px solid #333; }
+    .btn-subtle { background: #2a2a2a; color: #aaa; border: 1px solid #333; cursor: pointer; }
     
     /* Add Form */
     .add-form { display: flex; flex-direction: column; gap: 4px; background: #1e1e1e; padding: 6px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #2a2a2a; }
@@ -56,6 +56,9 @@
     
     .actions { display: flex; gap: 2px; flex-shrink: 0; }
     .icon-btn { background: none; border: none; color: #888; padding: 2px 4px; font-size: 12px; cursor: pointer; }
+
+    /* Sync Status Bar */
+    .sync-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 8px; border-top: 1px solid #2a2a2a; font-size: 0.75rem; color: #aaa; }
   </style>
 </head>
 <body>
@@ -91,6 +94,12 @@
   <!-- Items List Container -->
   <div id="itemList" class="list"></div>
 
+  <!-- GitHub Sync Bar -->
+  <div class="sync-bar">
+    <span id="syncStatus">GitHub Sync: Checking...</span>
+    <button class="btn-subtle" style="height:24px; padding: 0 6px; font-size: 0.7rem;" onclick="configureGitHub()">Setup Connection</button>
+  </div>
+
   <script>
     // System Data Architecture
     let db = JSON.parse(localStorage.getItem('trip_checklist_db')) || {
@@ -105,17 +114,144 @@
       }
     };
 
-    function save() {
-      localStorage.setItem('trip_checklist_db', JSON.stringify(db));
+    // GitHub Sync Configuration
+    let config = JSON.parse(localStorage.getItem('gh_sync_config')) || {
+      owner: '',
+      repo: 'trip-checklist',
+      path: 'data.json',
+      token: ''
+    };
+
+    let currentSha = null;
+    let hasOfflineEdits = localStorage.getItem('gh_has_offline_edits') === 'true';
+
+    function configureGitHub() {
+      const owner = prompt('GitHub Username:', config.owner) || config.owner;
+      const repo = prompt('GitHub Repository Name:', config.repo) || config.repo;
+      const path = prompt('Repository File Path:', config.path) || config.path;
+      const token = prompt('GitHub Fine-Grained Token:', config.token) || config.token;
+
+      config = { owner: owner.trim(), repo: repo.trim(), path: path.trim(), token: token.trim() };
+      localStorage.setItem('gh_sync_config', JSON.stringify(config));
+      fetchMasterData();
     }
 
-    function init() {
+    function utf8_to_b64(str) { 
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode('0x' + p1))); 
+    }
+    
+    function b64_to_utf8(str) { 
+      return decodeURIComponent(Array.prototype.map.call(atob(str), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')); 
+    }
+
+    async function fetchMasterData() {
+      if (!config.token) {
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Unconfigured (Tap Setup)';
+        return;
+      }
+
+      document.getElementById('syncStatus').innerText = 'GitHub Sync: Syncing...';
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`, {
+          headers: { 
+            'Authorization': `Bearer ${config.token}`, 
+            'Accept': 'application/vnd.github.v3+json' 
+          }
+        });
+
+        if (!res.ok) throw new Error('Network response error');
+
+        const data = await res.json();
+        currentSha = data.sha;
+        const remoteContent = JSON.parse(b64_to_utf8(data.content));
+
+        if (hasOfflineEdits) {
+          if (confirm("Offline edits found. Overwrite online master version with this device's version now?")) {
+            await pushToMaster(db);
+          } else {
+            db = remoteContent;
+            hasOfflineEdits = false;
+            localStorage.setItem('gh_has_offline_edits', 'false');
+            saveLocalState();
+          }
+        } else {
+          db = remoteContent;
+          saveLocalState();
+        }
+
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Master Online';
+      } catch (e) {
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Offline Mode';
+      }
+    }
+
+    async function pushToMaster(dataToPush) {
+      if (!config.token || !navigator.onLine) {
+        hasOfflineEdits = true;
+        localStorage.setItem('gh_has_offline_edits', 'true');
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Saved Offline';
+        return;
+      }
+
+      try {
+        if (!currentSha) {
+          const res = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`, {
+            headers: { 'Authorization': `Bearer ${config.token}` }
+          });
+          if (res.ok) {
+            const fileData = await res.json();
+            currentSha = fileData.sha;
+          }
+        }
+
+        const jsonStr = JSON.stringify(dataToPush, null, 2);
+        const payload = {
+          message: 'Trip Checklist Auto-Update',
+          content: utf8_to_b64(jsonStr),
+          sha: currentSha
+        };
+
+        const pushRes = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${config.path}`, {
+          method: 'PUT',
+          headers: { 
+            'Authorization': `Bearer ${config.token}`, 
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!pushRes.ok) throw new Error('Push rejected');
+
+        const pushData = await pushRes.json();
+        currentSha = pushData.content.sha;
+        hasOfflineEdits = false;
+        localStorage.setItem('gh_has_offline_edits', 'false');
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Master Online';
+      } catch (e) {
+        hasOfflineEdits = true;
+        localStorage.setItem('gh_has_offline_edits', 'true');
+        document.getElementById('syncStatus').innerText = 'GitHub Sync: Offline Edits Pending';
+      }
+    }
+
+    function saveLocalState() {
+      localStorage.setItem('trip_checklist_db', JSON.stringify(db));
+      initUI();
+    }
+
+    function saveAndSync() {
+      saveLocalState();
+      pushToMaster(db);
+    }
+
+    function initUI() {
       const select = document.getElementById('tripSelect');
       select.innerHTML = '';
-      const tripNames = Object.keys(db.trips);
+      const tripNames = Object.keys(db.trips || {});
 
       if (tripNames.length === 0) {
-        db.trips["My First Trip"] = [];
+        db.trips = { "My First Trip": [] };
         db.activeTrip = "My First Trip";
       } else if (!db.trips[db.activeTrip]) {
         db.activeTrip = tripNames[0];
@@ -133,8 +269,7 @@
 
     function switchTrip() {
       db.activeTrip = document.getElementById('tripSelect').value;
-      save();
-      renderList();
+      saveAndSync();
     }
 
     function addTrip() {
@@ -143,8 +278,7 @@
         const cleanName = name.trim();
         db.trips[cleanName] = [];
         db.activeTrip = cleanName;
-        save();
-        init();
+        saveAndSync();
       }
     }
 
@@ -156,8 +290,7 @@
         db.trips[cleanName] = db.trips[current];
         delete db.trips[current];
         db.activeTrip = cleanName;
-        save();
-        init();
+        saveAndSync();
       }
     }
 
@@ -170,8 +303,7 @@
       if (confirm(`Delete trip "${db.activeTrip}" and all its items?`)) {
         delete db.trips[db.activeTrip];
         db.activeTrip = Object.keys(db.trips)[0];
-        save();
-        init();
+        saveAndSync();
       }
     }
 
@@ -194,13 +326,11 @@
       };
 
       items.push(newItem);
-      save();
+      saveAndSync();
 
-      // Clear input fields, keep category & focus to prevent scroll jumps
       nameInput.value = '';
       notesInput.value = '';
       nameInput.focus();
-      renderList();
     }
 
     function toggleStatus(id) {
@@ -208,8 +338,7 @@
       const target = items.find(i => i.id === id);
       if (target) {
         target.completed = !target.completed;
-        save();
-        renderList();
+        saveAndSync();
       }
     }
 
@@ -234,8 +363,7 @@
           sameGroup[idx].priority += (direction === 'up' ? -1 : 1);
         }
 
-        save();
-        renderList();
+        saveAndSync();
       }
     }
 
@@ -256,8 +384,7 @@
       target.name = newName.trim();
       target.category = newCat.trim() || "General";
       target.notes = newNotes.trim();
-      save();
-      renderList();
+      saveAndSync();
     }
 
     function deleteItem(id) {
@@ -267,8 +394,7 @@
 
       if (confirm(`Delete "${target.name}"?`)) {
         db.trips[db.activeTrip] = items.filter(i => i.id !== id);
-        save();
-        renderList();
+        saveAndSync();
       }
     }
 
@@ -316,7 +442,10 @@
       }).join('');
     }
 
-    init();
+    // Network & Initialization Logic
+    window.addEventListener('online', fetchMasterData);
+    if (!config.token) configureGitHub(); else fetchMasterData();
+    initUI();
   </script>
 </body>
 </html>
