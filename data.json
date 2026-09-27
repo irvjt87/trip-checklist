@@ -27,17 +27,17 @@
         "priority": 3
       },
       {
-        "id": 4,
-        "name": "Kia Title & Release Papers",
-        "category": "Docs",
+        "id": 1790531813946,
+        "category": "Gear",
+        "name": "GVS Laptop & Charger",
         "notes": "",
         "completed": false,
         "priority": 4
       },
       {
-        "id": 1790531813946,
-        "category": "Gear",
-        "name": "GVS Laptop & Charger",
+        "id": 4,
+        "name": "Kia Title & Release Papers",
+        "category": "Docs",
         "notes": "",
         "completed": false,
         "priority": 5
