@@ -27,18 +27,18 @@
         "priority": 3
       },
       {
-        "id": 2,
-        "name": "CarMax - Brooklyn MN",
-        "category": "Logistics",
-        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
-        "completed": false,
-        "priority": 4
-      },
-      {
         "id": 4,
         "name": "Kia Title & Release Papers",
         "category": "Docs",
         "notes": "",
+        "completed": false,
+        "priority": 4
+      },
+      {
+        "id": 2,
+        "name": "CarMax - Brooklyn MN",
+        "category": "Logistics",
+        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
         "completed": false,
         "priority": 5
       },
