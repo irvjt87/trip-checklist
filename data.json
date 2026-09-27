@@ -41,6 +41,14 @@
         "notes": "",
         "completed": false,
         "priority": 5
+      },
+      {
+        "id": 1790531824657,
+        "category": "Gear",
+        "name": "Celsius Packs & Water",
+        "notes": "",
+        "completed": false,
+        "priority": 6
       }
     ]
   }
