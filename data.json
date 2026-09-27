@@ -19,18 +19,18 @@
         "priority": 2
       },
       {
-        "id": 2,
-        "name": "CarMax - Brooklyn MN",
-        "category": "Logistics",
-        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
-        "completed": false,
-        "priority": 3
-      },
-      {
         "id": 1790531813946,
         "category": "Gear",
         "name": "GVS Laptop & Charger",
         "notes": "",
+        "completed": false,
+        "priority": 3
+      },
+      {
+        "id": 2,
+        "name": "CarMax - Brooklyn MN",
+        "category": "Logistics",
+        "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
         "completed": false,
         "priority": 4
       },
