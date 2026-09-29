@@ -73,6 +73,14 @@
         "notes": "",
         "completed": false,
         "priority": 9
+      },
+      {
+        "id": 1790679957657,
+        "category": "Gear",
+        "name": "Phone charger",
+        "notes": "",
+        "completed": false,
+        "priority": 10
       }
     ],
     "My Car 'trip'": []
