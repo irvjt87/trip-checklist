@@ -59,17 +59,17 @@
         "priority": 7
       },
       {
-        "id": 1790531901338,
-        "category": "Lodging",
-        "name": "AirBnB ~ Elk River MN",
+        "id": 1790532541775,
+        "category": "Activities",
+        "name": "Say Hi to Kendra?",
         "notes": "",
         "completed": false,
         "priority": 8
       },
       {
-        "id": 1790532541775,
-        "category": "Activities",
-        "name": "Say Hi to Kendra?",
+        "id": 1790531901338,
+        "category": "Lodging",
+        "name": "AirBnB ~ Elk River MN",
         "notes": "",
         "completed": false,
         "priority": 9
