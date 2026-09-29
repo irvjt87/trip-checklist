@@ -51,18 +51,18 @@
         "priority": 6
       },
       {
-        "id": 1790679957657,
-        "category": "Gear",
-        "name": "Phone charger",
-        "notes": "",
-        "completed": false,
-        "priority": 7
-      },
-      {
         "id": 2,
         "name": "CarMax - Brooklyn MN",
         "category": "Logistics",
         "notes": "6900 Lakeland Ave N, Brooklyn Park, MN 55428",
+        "completed": false,
+        "priority": 7
+      },
+      {
+        "id": 1790679957657,
+        "category": "Gear",
+        "name": "Phone charger",
+        "notes": "",
         "completed": false,
         "priority": 8
       },
