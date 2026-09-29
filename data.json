@@ -59,17 +59,17 @@
         "priority": 7
       },
       {
-        "id": 1790679957657,
-        "category": "Gear",
-        "name": "Phone charger",
+        "id": 1790531901338,
+        "category": "Lodging",
+        "name": "AirBnB ~ Elk River MN",
         "notes": "",
         "completed": false,
         "priority": 8
       },
       {
-        "id": 1790531901338,
-        "category": "Lodging",
-        "name": "AirBnB ~ Elk River MN",
+        "id": 1790679957657,
+        "category": "Gear",
+        "name": "Phone charger",
         "notes": "",
         "completed": false,
         "priority": 9
