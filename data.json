@@ -35,18 +35,18 @@
         "priority": 4
       },
       {
-        "id": 1,
-        "name": "Approx Minivan Location - Princeton MN",
-        "category": "Logistics",
-        "notes": "301 N Rum River Dr, Princeton, MN 55371",
-        "completed": false,
-        "priority": 5
-      },
-      {
         "id": 1790600403855,
         "category": "Gear",
         "name": "Screwdriver & Sockets",
         "notes": "Remove license plates",
+        "completed": false,
+        "priority": 5
+      },
+      {
+        "id": 1,
+        "name": "Approx Minivan Location - Princeton MN",
+        "category": "Logistics",
+        "notes": "301 N Rum River Dr, Princeton, MN 55371",
         "completed": false,
         "priority": 6
       },
