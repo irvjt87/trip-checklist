@@ -12,14 +12,6 @@
         "priority": 3
       },
       {
-        "id": 1790600403855,
-        "category": "Gear",
-        "name": "Screwdriver & Sockets",
-        "notes": "Remove license plates",
-        "completed": false,
-        "priority": 6
-      },
-      {
         "id": 1,
         "name": "Minivan - Prime Time Auto",
         "category": "Logistics",
@@ -50,6 +42,14 @@
         "notes": "",
         "completed": true,
         "priority": 5
+      },
+      {
+        "id": 1790600403855,
+        "category": "Gear",
+        "name": "Screwdriver & Sockets",
+        "notes": "Remove license plates",
+        "completed": true,
+        "priority": 6
       },
       {
         "id": 2,
