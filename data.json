@@ -4,14 +4,6 @@
     "My Car 'trip'": [],
     "Car > Minivan Trip": [
       {
-        "id": 3,
-        "name": "Cash",
-        "category": "Docs",
-        "notes": "",
-        "completed": false,
-        "priority": 1
-      },
-      {
         "id": 4,
         "name": "Kia Title & Release Papers",
         "category": "Docs",
@@ -58,6 +50,14 @@
         "notes": "6201 S Lindbergh Blvd Saint Louis, MO  63123",
         "completed": false,
         "priority": 8
+      },
+      {
+        "id": 3,
+        "name": "Cash",
+        "category": "Docs",
+        "notes": "",
+        "completed": true,
+        "priority": 1
       }
     ]
   }
