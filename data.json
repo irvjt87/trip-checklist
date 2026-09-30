@@ -1,5 +1,5 @@
 {
-  "activeTrip": "Car > Minivan Trip",
+  "activeTrip": "My Car 'trip'",
   "trips": {
     "My Car 'trip'": [],
     "Car > Minivan Trip": [
@@ -58,14 +58,6 @@
         "notes": "6201 S Lindbergh Blvd Saint Louis, MO  63123",
         "completed": false,
         "priority": 8
-      },
-      {
-        "id": 1790531901338,
-        "category": "Lodging",
-        "name": "AirBnB ~ Elk River MN",
-        "notes": "",
-        "completed": false,
-        "priority": 10
       }
     ]
   }
