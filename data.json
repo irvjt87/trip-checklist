@@ -28,14 +28,6 @@
         "priority": 7
       },
       {
-        "id": 2,
-        "name": "CarMax - Lindbergh",
-        "category": "Logistics",
-        "notes": "6201 S Lindbergh Blvd Saint Louis, MO  63123",
-        "completed": false,
-        "priority": 8
-      },
-      {
         "id": 3,
         "name": "Cash",
         "category": "Docs",
@@ -58,6 +50,14 @@
         "notes": "",
         "completed": true,
         "priority": 5
+      },
+      {
+        "id": 2,
+        "name": "CarMax - Lindbergh",
+        "category": "Logistics",
+        "notes": "6201 S Lindbergh Blvd Saint Louis, MO  63123",
+        "completed": true,
+        "priority": 8
       }
     ]
   }
