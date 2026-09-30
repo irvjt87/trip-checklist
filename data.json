@@ -12,14 +12,6 @@
         "priority": 3
       },
       {
-        "id": 1790531824657,
-        "category": "Gear",
-        "name": "Celsius, Water, Bottle",
-        "notes": "",
-        "completed": false,
-        "priority": 4
-      },
-      {
         "id": 1790600403855,
         "category": "Gear",
         "name": "Screwdriver & Sockets",
@@ -50,6 +42,14 @@
         "notes": "",
         "completed": true,
         "priority": 1
+      },
+      {
+        "id": 1790531824657,
+        "category": "Gear",
+        "name": "Celsius, Water, Bottle",
+        "notes": "",
+        "completed": true,
+        "priority": 4
       },
       {
         "id": 1790679957657,
