@@ -20,14 +20,6 @@
         "priority": 4
       },
       {
-        "id": 1790679957657,
-        "category": "Gear",
-        "name": "Phone charger",
-        "notes": "",
-        "completed": false,
-        "priority": 5
-      },
-      {
         "id": 1790600403855,
         "category": "Gear",
         "name": "Screwdriver & Sockets",
@@ -58,6 +50,14 @@
         "notes": "",
         "completed": true,
         "priority": 1
+      },
+      {
+        "id": 1790679957657,
+        "category": "Gear",
+        "name": "Phone charger",
+        "notes": "",
+        "completed": true,
+        "priority": 5
       }
     ]
   }
