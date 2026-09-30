@@ -1,7 +1,8 @@
 {
-  "activeTrip": "MN Minivan Trip",
+  "activeTrip": "Car > Minivan Trip",
   "trips": {
-    "MN Minivan Trip": [
+    "My Car 'trip'": [],
+    "Car > Minivan Trip": [
       {
         "id": 3,
         "name": "Cashiers Check & Cash",
@@ -82,7 +83,6 @@
         "completed": false,
         "priority": 10
       }
-    ],
-    "My Car 'trip'": []
+    ]
   }
 }
