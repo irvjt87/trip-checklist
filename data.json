@@ -4,14 +4,6 @@
     "My Car 'trip'": [],
     "Car > Minivan Trip": [
       {
-        "id": 1,
-        "name": "Minivan - Prime Time Auto",
-        "category": "Logistics",
-        "notes": "2616 N Florissant Ave Saint Louis, MO  63106",
-        "completed": false,
-        "priority": 7
-      },
-      {
         "id": 3,
         "name": "Cash",
         "category": "Docs",
@@ -50,6 +42,14 @@
         "notes": "Remove license plates",
         "completed": true,
         "priority": 6
+      },
+      {
+        "id": 1,
+        "name": "Minivan - Prime Time Auto",
+        "category": "Logistics",
+        "notes": "2616 N Florissant Ave Saint Louis, MO  63106",
+        "completed": true,
+        "priority": 7
       },
       {
         "id": 2,
