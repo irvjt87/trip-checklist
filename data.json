@@ -1,6 +1,15 @@
 {
   "activeTrip": "CO Old Hundred Gold Mine",
   "trips": {
-    "CO Old Hundred Gold Mine": []
+    "CO Old Hundred Gold Mine": [
+      {
+        "id": 1791024946526,
+        "category": "General",
+        "name": "SW / San Juan region",
+        "notes": "Open ~midday-early October",
+        "completed": false,
+        "priority": 1
+      }
+    ]
   }
 }
