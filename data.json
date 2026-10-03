@@ -1,64 +1,6 @@
 {
-  "activeTrip": "Car > Minivan Trip",
+  "activeTrip": "My Car 'trip'",
   "trips": {
-    "My Car 'trip'": [],
-    "Car > Minivan Trip": [
-      {
-        "id": 3,
-        "name": "Cash",
-        "category": "Docs",
-        "notes": "",
-        "completed": true,
-        "priority": 1
-      },
-      {
-        "id": 4,
-        "name": "Kia Title & Release Papers",
-        "category": "Docs",
-        "notes": "",
-        "completed": true,
-        "priority": 3
-      },
-      {
-        "id": 1790531824657,
-        "category": "Gear",
-        "name": "Celsius, Water, Bottle",
-        "notes": "",
-        "completed": true,
-        "priority": 4
-      },
-      {
-        "id": 1790679957657,
-        "category": "Gear",
-        "name": "Phone charger",
-        "notes": "",
-        "completed": true,
-        "priority": 5
-      },
-      {
-        "id": 1790600403855,
-        "category": "Gear",
-        "name": "Screwdriver & Sockets",
-        "notes": "Remove license plates",
-        "completed": true,
-        "priority": 6
-      },
-      {
-        "id": 1,
-        "name": "Minivan - Prime Time Auto",
-        "category": "Logistics",
-        "notes": "2616 N Florissant Ave Saint Louis, MO  63106",
-        "completed": true,
-        "priority": 7
-      },
-      {
-        "id": 2,
-        "name": "CarMax - Lindbergh",
-        "category": "Logistics",
-        "notes": "6201 S Lindbergh Blvd Saint Louis, MO  63123",
-        "completed": true,
-        "priority": 8
-      }
-    ]
+    "My Car 'trip'": []
   }
 }
